@@ -1,0 +1,44 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+<div class="container">
+    <div class="input-container">
+        <h2>{{ message }}</h2>
+
+        {% if not success %}
+            <p>Attempts: {{ attempts }}</p>
+            <p>Previous Guess: {{ previous_guess }}</p>
+            <form method="post" action="{% url 'home' %}">
+                {% csrf_token %}
+                <label for="guess">Enter your guess:</label>
+                <input type="text" name="guess" maxlength="4" pattern="\d{4}" required>
+                <button type="submit">Submit</button>
+            </form>
+        {% endif %}
+    </div>
+
+    <div class="results-container">
+        {% if not success %}
+            <div class="results-section">
+                <h3>Results:</h3>
+                <ul>
+                    {% for result in results %}
+                        <li>Guess: {{ result.guess }}, Bulls: {{ result.bulls }}, Cows: {{ result.cows }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        {% if success %}
+            <p class="success-message">{{ success_message }}</p>
+        {% endif %}
+
+        <form method="get" action="{% url 'home' %}">
+            <button type="submit">Start New Game</button>
+        </form>
+    </div>
+</div>
+  
+{% endblock %}
